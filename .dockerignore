@@ -1,0 +1,10 @@
+.git
+.yarn/cache
+node_modules
+.next
+out
+coverage
+dist
+*.tar
+*.log
+127.0.0.1
