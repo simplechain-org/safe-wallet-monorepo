@@ -4,7 +4,9 @@ import { join, resolve } from 'node:path'
 import { createGzip } from 'node:zlib'
 
 const root = resolve(process.argv[2] || 'out')
-const port = Number(process.env.REVERSE_PROXY_UI_PORT || process.env.PORT || 8080)
+// The reverse proxy routes to port 8080. `PORT=3000` is retained for Next.js
+// tooling in the image and must not override the static server port.
+const port = Number(process.env.REVERSE_PROXY_UI_PORT || 8080)
 
 createServer((request, response) => {
   const requestPath = decodeURIComponent((request.url || '/').split('?')[0])
