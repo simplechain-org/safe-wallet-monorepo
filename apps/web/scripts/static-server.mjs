@@ -13,9 +13,12 @@ createServer((request, response) => {
   const relativePath = requestPath === '/' ? 'index.html' : requestPath.replace(/^\/+/, '')
   const filePath = resolve(join(root, relativePath))
   const isWithinRoot = filePath === root || filePath.startsWith(`${root}/`)
+  const htmlFilePath = resolve(join(root, `${relativePath}.html`))
   const directoryIndex = join(filePath, 'index.html')
   const target = isWithinRoot && existsSync(filePath) && !statSync(filePath).isDirectory()
     ? filePath
+    : isWithinRoot && !relativePath.includes('.') && existsSync(htmlFilePath)
+      ? htmlFilePath
     : isWithinRoot && existsSync(directoryIndex)
       ? directoryIndex
       : requestPath === '/'
