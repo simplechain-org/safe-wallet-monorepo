@@ -32,7 +32,10 @@ export default useChains
 export const useChain = (chainId: string): Chain | undefined => {
   const { data } = useGetChainsConfigV2Query(CONFIG_SERVICE_KEY)
 
-  const rawChain = data?.entities[chainId] ? applyCustomChainDeployments(data.entities[chainId]) : undefined
+  const rawChain = useMemo(
+    () => (data?.entities[chainId] ? applyCustomChainDeployments(data.entities[chainId]) : undefined),
+    [data, chainId],
+  )
   const rawChains = useMemo(() => (rawChain ? [rawChain] : []), [rawChain])
 
   return useChainsWithOverrides(rawChains)[0]
