@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.7
+
 FROM node:24.14.0-alpine
 ARG ALPINE_MIRROR=dl-cdn.alpinelinux.org
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_MIRROR}/g" /etc/apk/repositories \
@@ -26,7 +28,8 @@ RUN yarn config set httpTimeout 300000 \
 
 # Run any custom post-install scripts
 ENV CYPRESS_INSTALL_BINARY=0
-RUN yarn install --immutable
+RUN --mount=type=cache,id=safe-yarn-cache,target=/root/.yarn/berry/cache \
+  yarn install --immutable
 RUN yarn after-install
 
 # Set environment variables
